@@ -1,0 +1,109 @@
+<!--
+  EXPORT: tela de carregamento (loader) + favicon — Vieira & Marques
+  Extraído do site verbas-rescisorias.vieiraemarquesadvogados.com
+
+  COMO USAR EM OUTRA PÁGINA:
+  1. Copie a pasta "favicon/" e o arquivo "logo-vieira-marques-advogados.webp"
+     para dentro da pasta de uploads/imagens da outra página, ajustando os
+     caminhos abaixo (href/src) se a estrutura de pastas for diferente.
+  2. Cole o bloco <head> (linhas dentro do comentário "1) HEAD") dentro do
+     <head> da outra página.
+  3. Cole o bloco <body> (dentro do comentário "2) BODY") logo depois da
+     tag de abertura <body> da outra página — ele precisa ser o primeiro
+     elemento do body para cobrir a tela inteira antes do resto carregar.
+  4. Cole o <style> (dentro do comentário "3) CSS") no <head>, ou em um
+     arquivo .css já carregado pela página.
+  5. Cole o <script> (dentro do comentário "4) JS") antes do </body>,
+     ou adicione a função initLoader() ao arquivo JS da página e chame-a
+     no carregamento (DOMContentLoaded).
+
+  Este arquivo também funciona sozinho: abra-o direto no navegador para
+  ver a tela de carregamento em ação (ela se esconde sozinha ao terminar
+  de carregar, com um teto de segurança de 800ms).
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo — tela de carregamento e favicon</title>
+
+<!-- ============ 1) HEAD: favicon (cole dentro do <head> da outra página) ============ -->
+<meta name="theme-color" content="#0B0B0B">
+<link rel="icon" href="favicon/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+<!-- opcionais, para PWA/Android (mesmo mark em resoluções maiores) -->
+<link rel="icon" type="image/png" sizes="192x192" href="favicon/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon/icon-512.png">
+<!-- ============ fim do bloco HEAD ============ -->
+
+<!-- ============ 3) CSS: tela de carregamento (cole no <head> ou em um .css) ============ -->
+<style>
+  html, body { margin: 0; padding: 0; background: #0B0B0B; }
+  @keyframes vmCardPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 14px 30px -6px rgba(0,0,0,0.55), 0 0 0 0 rgba(255,255,255,0); }
+    50% { transform: scale(1.08); box-shadow: 0 22px 44px -8px rgba(0,0,0,0.6), 0 0 0 14px rgba(255,255,255,0.12); }
+  }
+  @keyframes vmGlow {
+    0%, 100% { filter: drop-shadow(0 0 0 rgba(255,255,255,0)); }
+    50% { filter: drop-shadow(0 0 16px rgba(255,255,255,0.75)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vm-loader-card, .vm-loader-mark { animation: none !important; }
+  }
+  /* [hidden] tem menor especificidade que display inline/flex — sem esta
+     regra o loader pode ficar visível/clicável mesmo com o atributo hidden. */
+  #loader:not([hidden]) { display: flex; }
+</style>
+<!-- ============ fim do bloco CSS ============ -->
+</head>
+<body>
+
+<!-- ============ 2) BODY: primeiro elemento dentro de <body> (cole aqui) ============ -->
+<div id="loader" role="status" aria-live="polite" aria-label="Carregando" style="position: fixed; inset: 0; z-index: 9999; background: #0B0B0B; align-items: center; justify-content: center; transition: opacity .5s ease;">
+  <div class="vm-loader-card" style="width: 112px; height: 112px; border-radius: 22px; background: #141414; border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; animation: vmCardPulse 1.7s ease-in-out infinite;">
+    <img src="logo-vieira-marques-advogados.webp" alt="Vieira &amp; Marques" width="180" height="180" class="vm-loader-mark" style="width: 66px; height: auto; display: block; border-radius: 10px; animation: vmGlow 1.7s ease-in-out infinite;">
+  </div>
+</div>
+<!-- ============ fim do bloco BODY ============ -->
+
+<h1 style="color:#fff;font-family:sans-serif;text-align:center;margin-top:40px;">Conteúdo da página (exemplo)</h1>
+<p style="color:#aaa;font-family:sans-serif;text-align:center;">A tela de carregamento acima some sozinha assim que a página termina de carregar.</p>
+
+<!-- ============ 4) JS: esconde o loader (cole antes de </body>) ============ -->
+<script>
+(function () {
+  "use strict";
+  function initLoader() {
+    var loader = document.getElementById("loader");
+    if (!loader) return;
+    var done = false;
+    function esconder() {
+      if (done) return;
+      done = true;
+      document.documentElement.style.overflow = "";
+      loader.style.opacity = "0";
+      loader.style.pointerEvents = "none";
+      setTimeout(function () { loader.hidden = true; }, 200);
+    }
+    document.documentElement.style.overflow = "hidden";
+    if (document.readyState === "complete") {
+      esconder();
+    } else {
+      window.addEventListener("load", esconder);
+      setTimeout(esconder, 800); // teto de segurança: nunca trava mais que 800ms
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initLoader);
+  } else {
+    initLoader();
+  }
+})();
+</script>
+<!-- ============ fim do bloco JS ============ -->
+
+</body>
+</html>
