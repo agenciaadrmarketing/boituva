@@ -56,14 +56,14 @@ FRASES = [
 
 # src original -> (src otimizado, srcset, sizes, width, height)
 IMAGENS = {
-    "uploads/16.jpg": ("assets/img/escritorio-boituva-1228.webp", "assets/img/escritorio-boituva-640.webp 640w, assets/img/escritorio-boituva-1228.webp 1228w", 1228, 819),
+    "uploads/16.jpg": ("assets/img/escritorio-boituva-1228.webp", "assets/img/escritorio-boituva-640.webp 640w, assets/img/escritorio-boituva-960.webp 960w, assets/img/escritorio-boituva-1228.webp 1228w", 1228, 819),
     "uploads/17-e1772128273241.jpg": ("assets/img/recepcao-1228.webp", "assets/img/recepcao-640.webp 640w, assets/img/recepcao-1228.webp 1228w", 1228, 570),
     "uploads/19.jpg": ("assets/img/sala-atendimento-1228.webp", "assets/img/sala-atendimento-640.webp 640w, assets/img/sala-atendimento-1228.webp 1228w", 1228, 819),
     "uploads/1-3.jpg": ("assets/img/cta-fundo-1228.webp", "assets/img/cta-fundo-640.webp 640w, assets/img/cta-fundo-1228.webp 1228w", 1228, 819),
     "uploads/equipe.jpg": ("assets/img/equipe-600.webp", None, 600, 400),
     "uploads/dscf5096_1_54227471182_o.webp": ("assets/img/dr-oscar-vieira-900.webp", "assets/img/dr-oscar-vieira-480.webp 480w, assets/img/dr-oscar-vieira-900.webp 900w", 900, 1350),
-    "uploads/Gemini_Generated_Image_jcvy6ljcvy6ljcvy.jpeg": ("assets/img/textura-servicos.webp", None, 1400, 785),
-    "uploads/Gemini_Generated_Image_4j0b2v4j0b2v4j0b.jpeg": ("assets/img/textura-passos.webp", None, 1400, 785),
+    "uploads/Gemini_Generated_Image_jcvy6ljcvy6ljcvy.jpeg": ("assets/img/textura-servicos.webp", "assets/img/textura-servicos-700.webp 700w, assets/img/textura-servicos.webp 1400w", 1400, 785),
+    "uploads/Gemini_Generated_Image_4j0b2v4j0b2v4j0b.jpeg": ("assets/img/textura-passos.webp", "assets/img/textura-passos-700.webp 700w, assets/img/textura-passos.webp 1400w", 1400, 785),
     "uploads/logo-vm.png": ("assets/img/logo-vm-360.webp", "assets/img/logo-vm-360.webp 360w, assets/img/logo-vm-760.webp 760w", 360, 80),
 }
 
@@ -187,7 +187,7 @@ def main():
     head = head.replace(
         '<link rel="preload" as="image" href="uploads/16.jpg" fetchpriority="high">',
         '<link rel="preload" as="font" type="font/woff2" href="assets/fonts/lexend-deca-latin.woff2" crossorigin>\n'
-        '<link rel="preload" as="image" href="assets/img/escritorio-boituva-1228.webp" imagesrcset="assets/img/escritorio-boituva-640.webp 640w, assets/img/escritorio-boituva-1228.webp 1228w" imagesizes="100vw" fetchpriority="high">',
+        '<link rel="preload" as="image" href="assets/img/escritorio-boituva-1228.webp" imagesrcset="assets/img/escritorio-boituva-640.webp 640w, assets/img/escritorio-boituva-960.webp 960w, assets/img/escritorio-boituva-1228.webp 1228w" imagesizes="100vw" fetchpriority="high">',
     )
     # CSS: fonte local, hero sem opacity 0 (não atrasa o LCP), contraste
     head = head.replace("<style>\n", "<style>\n  " + FONT_FACE + "\n", 1)

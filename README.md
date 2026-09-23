@@ -33,9 +33,9 @@ Para mudar textos ou layout, edite `design/publicar/index.html` e rode o script 
 
 | | Antes | Depois |
 |---|---|---|
-| Performance mobile | 25 | 98–99 |
-| LCP mobile | 42,7 s | 2,2 s |
-| Peso total | 8,1 MB | ~265 KB |
+| Performance mobile | 25 | 100 |
+| LCP mobile | 42,7 s | 1,6 s |
+| Peso total | 8,1 MB | ~145 KB (com gzip) |
 
 ## Arquivos do projeto (Claude Design)
 
