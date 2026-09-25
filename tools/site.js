@@ -136,4 +136,74 @@
     });
     ciclo();
   }
+
+  // Carrossel de avaliações do Google
+  var trilho = $("aval-trilho");
+  if (trilho) {
+    var cards = Array.prototype.slice.call(trilho.children);
+    var ctrl = $("aval-ctrl"), dotsBox = $("aval-dots"), aDots = [], aTimer, aPausa = false, aVisivel = false;
+    var passo = function () { return cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : trilho.clientWidth; };
+    var porTela = function () { return Math.max(1, Math.round(trilho.clientWidth / passo())); };
+    var paginas = function () { return Math.max(1, cards.length - porTela() + 1); };
+    var atual = function () { return Math.min(paginas() - 1, Math.round(trilho.scrollLeft / passo())); };
+    var irA = function (i) { trilho.scrollTo({ left: i * passo() }); };
+    var montarDots = function () {
+      var n = paginas();
+      ctrl.hidden = n < 2;
+      if (aDots.length === n) return;
+      dotsBox.innerHTML = ""; aDots = [];
+      for (var i = 0; i < n; i++) {
+        var b = document.createElement("button");
+        b.type = "button"; b.setAttribute("aria-label", "Ir para avaliação " + (i + 1));
+        b.style.cssText = "width:32px;height:44px;border:none;padding:0;margin:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;";
+        b.innerHTML = '<span style="display:block;height:7px;border-radius:999px;transition:width .3s ease,background .3s ease;pointer-events:none;"></span>';
+        (function (k) { b.addEventListener("click", function () { irA(k); agenda(); }); })(i);
+        dotsBox.appendChild(b); aDots.push(b);
+      }
+      marcar();
+    };
+    var marcar = function () {
+      var a = atual();
+      aDots.forEach(function (b, k) {
+        var sp = b.firstChild;
+        sp.style.width = k === a ? "24px" : "7px";
+        sp.style.background = k === a ? "#1EA94F" : "#C8C8C8";
+        b.setAttribute("aria-current", k === a ? "true" : "false");
+      });
+    };
+    var agenda = function () {
+      clearTimeout(aTimer);
+      if (reduz) return;
+      aTimer = setTimeout(function () {
+        if (!aPausa && aVisivel && paginas() > 1) irA((atual() + 1) % paginas());
+        agenda();
+      }, 6000);
+    };
+    document.querySelectorAll("[data-aval]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var n = paginas(); irA((atual() + Number(b.getAttribute("data-aval")) + n) % n); agenda();
+      });
+    });
+    var raf;
+    trilho.addEventListener("scroll", function () { cancelAnimationFrame(raf); raf = requestAnimationFrame(marcar); }, { passive: true });
+    var box = trilho.parentNode;
+    box.addEventListener("mouseenter", function () { aPausa = true; });
+    box.addEventListener("mouseleave", function () { aPausa = false; });
+    box.addEventListener("focusin", function () { aPausa = true; });
+    box.addEventListener("focusout", function () { aPausa = false; });
+    trilho.addEventListener("touchstart", function () { aPausa = true; agenda(); }, { passive: true });
+    trilho.addEventListener("touchend", function () { aPausa = false; }, { passive: true });
+    trilho.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        e.preventDefault(); var n = paginas();
+        irA((atual() + (e.key === "ArrowRight" ? 1 : -1) + n) % n);
+      }
+    });
+    if (temIO) {
+      new IntersectionObserver(function (en) { aVisivel = en[0].isIntersecting; }).observe(trilho);
+    } else { aVisivel = true; }
+    var rz;
+    window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(montarDots, 150); });
+    montarDots(); agenda();
+  }
 })();
