@@ -23,7 +23,9 @@ python3 tools/build_static.py
 ```
 
 - Fonte: `design/publicar/index.html` (template do Claude Design)
-- Interações (carrossel, galeria, balão, Trustindex): `tools/site.js`, embutido no HTML
+- Interações (carrossel, galeria, balão): `tools/site.js`, embutido no HTML
+- Google Tag Manager (GTM-WP9XSL6K): inserido pelo script no `<head>` e logo após o `<body>`
+- Avaliações do Google: seção estática em `design/publicar/index.html` (procure por `aval-grid`); atualize a nota, o total e os depoimentos por lá
 - Imagens otimizadas (WebP, tamanhos responsivos): `assets/img/`
 - Fonte Lexend Deca hospedada localmente: `assets/fonts/`
 

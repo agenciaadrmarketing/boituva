@@ -67,6 +67,19 @@ IMAGENS = {
     "uploads/logo-vm.png": ("assets/img/logo-vm-360.webp", "assets/img/logo-vm-360.webp 360w, assets/img/logo-vm-760.webp 760w", 360, 80),
 }
 
+GTM_ID = "GTM-WP9XSL6K"
+GTM_HEAD = """<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','%s');</script>
+<!-- End Google Tag Manager -->""" % GTM_ID
+GTM_BODY = """<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=%s"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->""" % GTM_ID
+
 FONT_FACE = """@font-face { font-family: 'Lexend Fallback'; src: local('Arial'), local('Helvetica'), local('Liberation Sans'), local('Roboto'); size-adjust: 110.2%; ascent-override: 90.7%; descent-override: 22.7%; line-gap-override: 0%; }
   @font-face { font-family: 'Lexend Deca'; font-style: normal; font-weight: 300 700; font-display: swap; src: url(assets/fonts/lexend-deca-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }"""
 
@@ -257,12 +270,6 @@ def main():
     inner = inner.replace(">{{ selecionadaLegenda }}</p>", ' id="lb-legenda"></p>')
     body = a + inner.strip() + b
 
-    # Trustindex: carrega só quando a seção aparece
-    body = body.replace('<div ref="{{ trustRef }}" style="min-height: {{ trustMinH }};"></div>', '<div id="trust" style="min-height: 320px;"></div>')
-    a, inner, b = unwrap_if(body, "trustFalhou")
-    inner = inner.replace("<div style=", '<div id="trust-fallback" hidden style=', 1)
-    body = a + inner.strip() + b
-
     # balão flutuante
     a, inner, b = unwrap_if(body, "balaoAberto")
     inner = inner.replace('<div class="balao"', '<div class="balao" id="balao"', 1)
@@ -306,8 +313,9 @@ def main():
 
     out = (
         '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n'
+        + GTM_HEAD + "\n"
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-        + head.strip() + "\n</head>\n<body>\n" + body.strip() + "\n<script>\n" + js.strip() + "\n</script>\n</body>\n</html>\n"
+        + head.strip() + "\n</head>\n<body>\n" + GTM_BODY + "\n" + body.strip() + "\n<script>\n" + js.strip() + "\n</script>\n</body>\n</html>\n"
     )
     OUT.write_text(out, encoding="utf-8")
     print("ok:", OUT, len(out.encode()) // 1024, "KB")

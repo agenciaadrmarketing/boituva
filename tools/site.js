@@ -136,35 +136,4 @@
     });
     ciclo();
   }
-
-  // Trustindex: só carrega quando a seção de depoimentos se aproxima
-  var trust = $("trust");
-  if (trust) {
-    var carregar = function () {
-      if (trust.dataset.ok) return;
-      trust.dataset.ok = "1";
-      var sc = document.createElement("script");
-      sc.async = true; sc.defer = true;
-      sc.src = "https://cdn.trustindex.io/loader.js?d7709af814a8819cb596bd80f75";
-      trust.appendChild(sc);
-      var pronto = function () {
-        if (!trust.querySelector('[class*="ti-"]')) return false;
-        clearTimeout(chk); obs.disconnect(); trust.style.minHeight = "0px";
-        return true;
-      };
-      var obs = new MutationObserver(pronto);
-      obs.observe(trust, { childList: true, subtree: true });
-      var chk = setTimeout(function () {
-        if (!pronto()) { trust.style.minHeight = "0px"; $("trust-fallback").hidden = false; }
-      }, 12000);
-    };
-    if ("IntersectionObserver" in window) {
-      var tio = new IntersectionObserver(function (en) {
-        if (en[0].isIntersecting) { tio.disconnect(); carregar(); }
-      }, { rootMargin: "600px 0px" });
-      tio.observe(trust);
-    } else {
-      window.addEventListener("load", carregar);
-    }
-  }
 })();
