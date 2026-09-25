@@ -162,8 +162,10 @@
       }
       marcar();
     };
+    var cont = $("aval-cont");
     var marcar = function () {
       var a = atual();
+      if (cont) cont.textContent = (a + 1) + " / " + paginas();
       aDots.forEach(function (b, k) {
         var sp = b.firstChild;
         sp.style.width = k === a ? "24px" : "7px";
