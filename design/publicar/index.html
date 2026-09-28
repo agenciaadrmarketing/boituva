@@ -290,7 +290,7 @@
             </div>
             <ul style="list-style: none; margin: 0; padding: 0; display: grid; gap: 9px;">
               <sc-for list="{{ ar.itens }}" as="it" hint-placeholder-count="4">
-                <li style="display: flex; gap: 10px; font-size: 14.5px; font-weight: 300; line-height: 1.55; color: #4A4A4A;"><span aria-hidden="true" style="width: 5px; height: 5px; border-radius: 50%; background: #1EA94F; flex: none; margin-top: 9px;"></span><span>{{ it }}</span></li>
+                <li style="display: flex; gap: 10px; font-size: 14.5px; font-weight: 300; line-height: 1.55; color: #4A4A4A; text-align: left;"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true" style="flex: none; margin-top: 3px;"><circle cx="8" cy="8" r="8" fill="#0B0B0B"></circle><path d="M4.8 8.2l2.1 2.1 4.3-4.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>{{ it }}</span></li>
               </sc-for>
             </ul>
             <a href="{{ waLink }}" data-msg="{{ ar.msg }}" onClick="{{ abrirPopup }}" style="margin-top: auto; padding-top: 14px; border-top: 1px solid #ECECEC; font-size: 14px; font-weight: 600; color: #0B0B0B; display: flex; align-items: center; justify-content: space-between; gap: 10px;" style-hover="color: #1EA94F;">Outros assuntos de {{ ar.curto }}<span aria-hidden="true">→</span></a>
