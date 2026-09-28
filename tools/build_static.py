@@ -228,7 +228,7 @@ def main():
     for i, (titulo, curto, itens) in enumerate(AREAS):
         itens_html = "\n                ".join(item_tpl.replace("{{ it }}", html.escape(x)) for x in itens)
         c = item_a + itens_html + item_b
-        msg = "Oi, vim pelo site e quero agendar um atendimento em Boituva sobre " + titulo + "."
+        msg = MSG_PADRAO
         c = (c.replace("{{ ar.titulo }}", html.escape(titulo)).replace("{{ ar.num }}", "%02d" % (i + 1))
               .replace("{{ ar.curto }}", html.escape(curto)).replace("{{ ar.msg }}", html.escape(msg)))
         cards.append(c.strip())
