@@ -300,6 +300,19 @@ def main():
     body = re.sub(r'(<img src="assets/img/logo-vm-360\.webp") fetchpriority="high" decoding="async"(?=[^>]*max-width: 380px)', r'\1 loading="lazy" decoding="async"', body)
     body = re.sub(r'(<img src="assets/img/logo-vm-360\.webp") fetchpriority="high"', r'\1', body)
 
+    # ícones repetidos (logo do Google e estrelas das avaliações) viram <symbol> reutilizável
+    g_svg = re.search(r'<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#4285F4".*?</svg>', body, re.S)
+    star = re.search(r'<svg viewBox="0 0 20 20" width="17" height="17" fill="#F9B601" aria-hidden="true">(<path[^>]*></path>)</svg>', body)
+    if g_svg and star:
+        g_paths = re.search(r"<svg[^>]*>(.*)</svg>", g_svg.group(0), re.S).group(1)
+        sprite = ('<svg width="0" height="0" style="position: absolute;" aria-hidden="true">'
+                  f'<symbol id="ico-google" viewBox="0 0 24 24">{g_paths}</symbol>'
+                  f'<symbol id="ico-estrela" viewBox="0 0 20 20">{star.group(1)}</symbol></svg>')
+        body = re.sub(r'<svg viewBox="0 0 24 24" width="(\d+)" height="\1" aria-hidden="true"><path fill="#4285F4".*?</svg>',
+                      lambda m: f'<svg width="{m.group(1)}" height="{m.group(1)}" aria-hidden="true"><use href="#ico-google"></use></svg>', body, flags=re.S)
+        body = body.replace(star.group(0), '<svg width="17" height="17" fill="#F9B601" aria-hidden="true"><use href="#ico-estrela"></use></svg>')
+        body = sprite + "\n" + body
+
     leftover = re.findall(r"\{\{[^}]*\}\}|<sc-|style-hover|onClick=", body)
     if leftover:
         raise SystemExit("Sobras de template: %r" % leftover[:10])
