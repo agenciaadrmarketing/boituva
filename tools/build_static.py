@@ -15,7 +15,7 @@ SRC = ROOT / "design" / "publicar" / "index.html"
 OUT = ROOT / "index.html"
 
 FONE = "551533470189"
-MSG_PADRAO = "Oi, vim pelo site e quero agendar um atendimento no escritório em Boituva."
+MSG_PADRAO = "Oi, vim pelo site e gostaria de falar com um advogado em Boituva."
 
 
 def wa(msg):
