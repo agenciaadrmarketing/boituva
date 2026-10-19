@@ -86,6 +86,7 @@ FONT_FACE = """@font-face { font-family: 'Lexend Fallback'; src: local('Arial'),
 
 EXTRA_CSS = """
   [hidden] { display: none !important; }
+  html:not(.anim-on) a[data-msg], html:not(.anim-on) a[data-msg]::before, html:not(.anim-on) a[data-msg]::after { animation-play-state: paused !important; }
   .anim-off, .anim-off::before, .anim-off::after { animation-play-state: paused !important; }
   .lb-img { width: 100%; max-height: 76vh; object-fit: cover; display: block; }
   .vale-conteudo { transition: opacity .32s ease, transform .32s cubic-bezier(.22,.7,.2,1); }
@@ -201,7 +202,7 @@ def main():
     head = head.replace(
         '<link rel="preload" as="image" href="uploads/16.jpg" fetchpriority="high">',
         '<link rel="preload" as="font" type="font/woff2" href="assets/fonts/lexend-deca-latin.woff2" crossorigin>\n'
-        '<link rel="preload" as="image" href="assets/img/escritorio-boituva-1228.webp" imagesrcset="assets/img/escritorio-boituva-640.webp 640w, assets/img/escritorio-boituva-960.webp 960w, assets/img/escritorio-boituva-1228.webp 1228w" imagesizes="100vw" fetchpriority="high">',
+        '<link rel="preload" as="image" href="assets/img/hero-1228.webp" imagesrcset="assets/img/hero-640.webp 640w, assets/img/hero-960.webp 960w, assets/img/hero-1228.webp 1228w" imagesizes="100vw" fetchpriority="high">',
     )
     # CSS: fonte local, hero sem opacity 0 (não atrasa o LCP), contraste
     head = head.replace("<style>\n", "<style>\n  " + FONT_FACE + "\n", 1)
@@ -296,6 +297,15 @@ def main():
     body = body.replace("font-family: 'Lexend Deca', Helvetica, sans-serif;", "font-family: 'Lexend Deca', 'Lexend Fallback', Helvetica, sans-serif;")
     body, hover_css = converter_hover(body)
     body = trocar_imagens(body)
+
+    # hero: usa a versão com o filtro de cor já aplicado (sem CSS filter em imagem de tela cheia)
+    def hero_sub(m):
+        t = m.group(0)
+        t = t.replace("assets/img/escritorio-boituva-1228.webp", "assets/img/hero-1228.webp")
+        t = re.sub(r'srcset="[^"]*"', 'srcset="assets/img/hero-640.webp 640w, assets/img/hero-960.webp 960w, assets/img/hero-1228.webp 1228w"', t)
+        return t.replace(" filter: grayscale(0.4) contrast(1.05) brightness(0.9);", "")
+    body = re.sub(r'<img[^>]*class="hero-bg"[^>]*>', hero_sub, body)
+    body = re.sub(r" backdrop-filter: blur\(\d+px\);| -webkit-backdrop-filter: blur\(\d+px\);", "", body)
 
     # ajustes de desempenho/acessibilidade: só a imagem do hero tem prioridade alta
     body = re.sub(r'(<img src="assets/img/logo-vm-360\.webp") fetchpriority="high" decoding="async"(?=[^>]*max-width: 380px)', r'\1 loading="lazy" decoding="async"', body)

@@ -1,5 +1,6 @@
 (function () {
   "use strict";
+  function init() {
   var GALERIA = __GALERIA__;
   var VALE = __VALE__;
   var FRASES = __FRASES__;
@@ -208,4 +209,9 @@
     window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(montarDots, 150); });
     montarDots(); agenda();
   }
+
+  // brilho giratório dos botões só começa depois da 1ª pintura/medição
+  setTimeout(function () { document.documentElement.classList.add("anim-on"); }, 4000);
+  }
+  if (document.readyState === "complete") init(); else window.addEventListener("load", init);
 })();
