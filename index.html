@@ -195,13 +195,12 @@ w.addEventListener('load',function(){setTimeout(go,10000)})})(window,document,'G
     .mapa-wrap > div[aria-hidden] { display: none !important; }
     .mapa-card { position: relative !important; left: auto !important; top: auto !important; transform: none !important; width: 100% !important; border-radius: 0 !important; border-left: none !important; border-right: none !important; border-bottom: none !important; }
   }
-  .aval-trilho { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; padding: 4px 2px 34px; margin: 0 -2px -14px; overscroll-behavior-x: contain; }
+  .aval-trilho { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 4px 2px 34px; margin: 0 -2px -14px; overscroll-behavior-x: contain; }
   .aval-trilho::-webkit-scrollbar { display: none; }
   .aval-trilho > figure { flex: 0 0 calc((100% - 40px) / 3); scroll-snap-align: start; }
   @media (max-width: 900px) { .aval-trilho > figure { flex-basis: calc((100% - 20px) / 2); } }
   .aval-cont { display: none; }
   @media (max-width: 620px) { .aval-trilho > figure { flex-basis: 86%; } .aval-dots { display: none !important; } .aval-cont { display: inline; } }
-  @media (prefers-reduced-motion: reduce) { .aval-trilho { scroll-behavior: auto; } }
   @media (max-width: 720px) {
     .vale-panel { padding: 40px 22px !important; border-radius: 20px !important; }
     .vale-grid { grid-template-columns: 1fr !important; gap: 22px !important; }
@@ -1072,7 +1071,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var porTela = function () { return Math.max(1, Math.round(trilho.clientWidth / passo())); };
     var paginas = function () { return Math.max(1, cards.length - porTela() + 1); };
     var atual = function () { return Math.min(paginas() - 1, Math.round(trilho.scrollLeft / passo())); };
-    var irA = function (i) { trilho.scrollTo({ left: i * passo() }); };
+    var irA = function (i) { trilho.scrollTo({ left: i * passo(), behavior: reduz ? "auto" : "smooth" }); };
     var montarDots = function () {
       var n = paginas();
       ctrl.hidden = n < 2;

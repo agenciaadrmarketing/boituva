@@ -147,7 +147,7 @@
     var porTela = function () { return Math.max(1, Math.round(trilho.clientWidth / passo())); };
     var paginas = function () { return Math.max(1, cards.length - porTela() + 1); };
     var atual = function () { return Math.min(paginas() - 1, Math.round(trilho.scrollLeft / passo())); };
-    var irA = function (i) { trilho.scrollTo({ left: i * passo() }); };
+    var irA = function (i) { trilho.scrollTo({ left: i * passo(), behavior: reduz ? "auto" : "smooth" }); };
     var montarDots = function () {
       var n = paginas();
       ctrl.hidden = n < 2;
